@@ -1,4 +1,5 @@
 import argparse
+import json
 import os
 import random
 
@@ -11,7 +12,8 @@ CACHE_DIR = "./cache"
 
 def main():
     parser = argparse.ArgumentParser(description="Generate audio flashcards from a CSV vocabulary file.")
-    parser.add_argument("csv", help="Path to vocabulary CSV file")
+    parser.add_argument("csv", nargs="?", help="Path to vocabulary CSV file")
+    parser.add_argument("--list-voices", action="store_true", help="List available Piper voices and exit")
     parser.add_argument("--word-pause", type=float, default=3.0)
     parser.add_argument("--definition-pause", type=float, default=2.0)
     parser.add_argument("--example-pause", type=float, default=2.0)
@@ -23,6 +25,19 @@ def main():
     parser.add_argument("--voice", default=None)
     parser.add_argument("--mode", choices=["learn", "test"], default="learn")
     args = parser.parse_args()
+
+    if args.list_voices:
+        with open(os.path.join(os.path.dirname(__file__), "voices.json")) as f:
+            voices = json.load(f)
+        print(f"{'Voice':<42} {'Language':<16} {'Gender':<8} Quality")
+        print("-" * 78)
+        for v in voices:
+            marker = " *" if v.get("default") else "  "
+            print(f"{v['name']:<42} {v['lang']:<16} {v['gender']:<8} {v['quality']}{marker}")
+        print("\n* = default  |  voice files auto-download to ./voices/ on first use")
+        return
+    if not args.csv:
+        parser.error("csv is required unless --list-voices is used")
 
     cfg = Config(
         word_pause=args.word_pause,

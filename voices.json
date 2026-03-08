@@ -1,0 +1,11 @@
+[
+  {"name": "en_US-lessac-medium",              "lang": "English (US)", "gender": "Male",   "quality": "medium", "default": true},
+  {"name": "en_US-amy-medium",                 "lang": "English (US)", "gender": "Female", "quality": "medium"},
+  {"name": "en_US-ryan-high",                  "lang": "English (US)", "gender": "Male",   "quality": "high"},
+  {"name": "en_US-ljspeech-high",              "lang": "English (US)", "gender": "Female", "quality": "high"},
+  {"name": "en_GB-alan-medium",                "lang": "English (GB)", "gender": "Male",   "quality": "medium"},
+  {"name": "en_GB-southern_english_female-low","lang": "English (GB)", "gender": "Female", "quality": "low"},
+  {"name": "de_DE-thorsten-medium",            "lang": "German",       "gender": "Male",   "quality": "medium"},
+  {"name": "fr_FR-upmc-medium",                "lang": "French",       "gender": "Male",   "quality": "medium"},
+  {"name": "es_ES-sharvard-medium",            "lang": "Spanish",      "gender": "Male",   "quality": "medium"}
+]
