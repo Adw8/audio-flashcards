@@ -1,1 +1,4 @@
 pydub
+audioop-lts
+piper-tts
+numpy

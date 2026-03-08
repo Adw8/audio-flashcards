@@ -11,7 +11,7 @@ def silence(seconds: float) -> AudioSegment:
 def build_card_audio(card: Card, cfg: Config, cache_dir: str = "./cache") -> AudioSegment:
     word_text = card.word
     if card.part_of_speech:
-        word_segment = speak(word_text, cfg.voice, cache_dir) + speak(card.part_of_speech, cfg.voice, cache_dir)
+        word_segment = speak(word_text, cfg.voice, cache_dir) + silence(0.5) + speak(card.part_of_speech, cfg.voice, cache_dir)
     else:
         word_segment = speak(word_text, cfg.voice, cache_dir)
 
