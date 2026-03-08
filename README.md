@@ -1,6 +1,6 @@
 # audio-flashcards
 
-CLI tool that converts a CSV vocabulary list into spoken MP3 flashcard files using macOS text-to-speech.
+CLI tool that converts a CSV vocabulary list into spoken MP3 flashcard files using [Piper](https://github.com/rhasspy/piper) neural TTS.
 
 ## Requirements
 
@@ -37,7 +37,7 @@ python generate.py words.csv [options]
 | `--between-cards` | `4.0` | Silence between cards |
 | `--word-repeat` | `1` | Times to repeat the word |
 | `--output-dir` | `./output` | Output directory |
-| `--voice` | system default | macOS voice name (e.g. `Samantha`, `Daniel`) |
+| `--voice` | system default | Piper voice name (e.g. `en_US-lessac-medium`); run `--list-voices` to see all |
 | `--mode` | `learn` | `learn` includes examples, `test` omits them |
 | `--shuffle` | off | Randomise card order |
 | `--limit N` | all | Process only first N cards |
@@ -49,7 +49,7 @@ python generate.py words.csv [options]
 python generate.py words.csv
 
 # Quiz mode, shuffled, 10 cards, specific voice
-python generate.py words.csv --mode test --shuffle --limit 10 --voice Samantha
+python generate.py words.csv --mode test --shuffle --limit 10 --voice en_US-amy-medium
 
 # Repeat each word 3 times with longer pauses
 python generate.py words.csv --word-repeat 3 --word-pause 4 --definition-pause 3
