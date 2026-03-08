@@ -13,6 +13,7 @@ class Config:
     limit: int | None = None
     shuffle: bool = False
     mode: str = "learn"
+    cards_per_deck: int | None = None
 
 
 @dataclass

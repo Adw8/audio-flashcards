@@ -24,6 +24,7 @@ def main():
     parser.add_argument("--output-dir", default="./output")
     parser.add_argument("--voice", default=None)
     parser.add_argument("--mode", choices=["learn", "test"], default="learn")
+    parser.add_argument("--cards-per-deck", type=int, default=None)
     args = parser.parse_args()
 
     if args.list_voices:
@@ -50,6 +51,7 @@ def main():
         limit=args.limit,
         shuffle=args.shuffle,
         mode=args.mode,
+        cards_per_deck=args.cards_per_deck,
     )
 
     cards = parse_csv(args.csv)
@@ -63,12 +65,24 @@ def main():
     os.makedirs(cfg.output_dir, exist_ok=True)
     os.makedirs(CACHE_DIR, exist_ok=True)
 
-    total = len(cards)
-    for i, card in enumerate(cards, start=1):
-        print(f"[{i}/{total}] {card.word}")
-        audio = build_card_audio(card, cfg, cache_dir=CACHE_DIR)
-        filename = f"{i:03d}_{card.word.lower().replace(' ', '_')}.mp3"
-        export(audio, os.path.join(cfg.output_dir, filename))
+    if cfg.cards_per_deck is not None:
+        chunk_size = cfg.cards_per_deck
+        chunks = [cards[i:i+chunk_size] for i in range(0, len(cards), chunk_size)]
+        for deck_idx, deck_cards in enumerate(chunks, start=1):
+            deck_dir = os.path.join(cfg.output_dir, f"deck_{deck_idx}")
+            os.makedirs(deck_dir, exist_ok=True)
+            for i, card in enumerate(deck_cards, start=1):
+                print(f"[deck {deck_idx}/{len(chunks)}, {i}/{len(deck_cards)}] {card.word}")
+                audio = build_card_audio(card, cfg, cache_dir=CACHE_DIR)
+                filename = f"{i:03d}_{card.word.lower().replace(' ', '_')}.mp3"
+                export(audio, os.path.join(deck_dir, filename))
+    else:
+        total = len(cards)
+        for i, card in enumerate(cards, start=1):
+            print(f"[{i}/{total}] {card.word}")
+            audio = build_card_audio(card, cfg, cache_dir=CACHE_DIR)
+            filename = f"{i:03d}_{card.word.lower().replace(' ', '_')}.mp3"
+            export(audio, os.path.join(cfg.output_dir, filename))
 
 
 if __name__ == "__main__":
