@@ -15,6 +15,16 @@ _HF_BASE = "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0"
 _loaded: dict[str, PiperVoice] = {}
 
 
+def _normalize_voice_name(voice_name: str) -> str:
+    """Normalise locale country code to uppercase: en_gb-... → en_GB-..."""
+    parts = voice_name.split("-", 2)
+    if len(parts) == 3:
+        loc_parts = parts[0].split("_", 1)
+        if len(loc_parts) == 2:
+            parts[0] = f"{loc_parts[0]}_{loc_parts[1].upper()}"
+    return "-".join(parts)
+
+
 def _voice_url(voice_name: str, ext: str) -> str:
     # voice_name format: {locale}-{name}-{quality}  e.g. en_US-lessac-medium
     parts = voice_name.split("-", 2)
@@ -42,7 +52,7 @@ def _get_voice(voice_name: str, voices_dir: str) -> PiperVoice:
 
 
 def speak(text: str, voice: str | None, cache_dir: str) -> AudioSegment:
-    voice_name = voice or DEFAULT_VOICE
+    voice_name = _normalize_voice_name(voice or DEFAULT_VOICE)
     key = hashlib.sha256(f"{text}{voice_name}".encode()).hexdigest()[:16]
     cache_path = os.path.join(cache_dir, f"{key}.wav")
 
